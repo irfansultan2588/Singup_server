@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import { nanoid } from "nanoid"
 
 const app = express();
 app.use(express.json());
@@ -7,120 +8,93 @@ app.use(cors());
 
 const port = process.env.port || 3000;
 
-let users = [];
+let userBase = [];
 
-// genrate random number from 1 to 1000000
+app.post("/Singup", (req, res) => {
 
-function randomNumber() {
-    return Math.floor(Math.random() * 100000000)
+    let body = req.body;
 
-}
+    if (!body.fistName || !body.lastName || !body.email || !body.password) {
 
-app.post("/user", (req, res) => {
-    console.log(req.body);
+        res.status(400).send(`required fields missing, request example:
+        {
+            "firstName": "john",
+            "lastName": "Doe",
+            "email": abc@abc.com",
+            "password": "12345",
+
+        }`
+
+        );
+        return;
+    }
 
     let newUser = {
-        id: randomNumber(),
-        fullname: req.body.fullname,
-        username: req.body.username,
-        password: req.body.password,
+        userId: nanoid(),
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        password: body.password
     }
 
-    users.push(newUser);
+    userBase.push(newUser);
+    res.status(201).send("user is created");
+});
 
-    res.status(201).send('user is created');
-})
+app.post("/login", (req, res) => {
+    let body = req.body;
 
-app.get("/user/:userId", (req, res) => {  // get single user
+    if (!body.fistName || !body.lastName || !body.email || !body.password) {
 
-    let userId = req.params.userId;
+        res.status(400).send(`required fields missing, request example:
+          {
+          
+           "email": abc@abc.com",
+           "password": "12345",
+
+          }`
+
+        );
+        return;
+    }
+
     let isFound = false;
 
-    for (let i = 0; i < users.length; i++) {
+    for (let i = 0; i < userBase.length; i++) {
+        if (userBase[i].email === body.email) {
 
-        if (users[i].id == userId) {
-            req.send(users[i]);
-            isFound = true;
-            break;
+            if (userBase[i].password === body.password) {
+
+                isFound = true;
+
+                res.status(200).send({
+                    firstName: userBase[i].firstName,
+                    lastName: userBase[i].lastName,
+                    email: userBase[i].email,
+                    Message: "login sucacessful"
+                })
+                return;
+
+
+            } else {
+                res.status(401).send({
+                    Message: "incorrect password"
+                })
+                return;
+            }
         }
+
     }
+
     if (!isFound) {
-        req.status(204).send("user not found");
+        res.status(404).send({
+            Message: "user not found"
+        })
+        return;
     }
 
-})
-
-app.get("/users", (req, res) => {  // get all users
-    res.send(users);
-})
-
-app.put("/user/:userId", (req, res) => { // to modify single user
-    res.send('user is modified');
-
-    let userId = req.params.userId;
-    let userIndex = -1
-
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].id == userId) {
-            userIndex = i;
-            break;
-        }
-    }
-    if (userIndex === -1) {
-        req.status(204).send("user not found");
-    } else {
-        if (req.body.fullname) {
-            users[userIndex].fullname = req.body.fullname
-        };
-
-        if (req.body.username) {
-            users[userIndex].fullname = req.body.username
-        };
-        if (req.body.password) {
-            users[userIndex].fullname = req.body.password
-        };
-
-        req.send(users[userIndex]);
-    }
-})
-
-app.delete("/user/:userId", (req, res) => {  // delete single user
-
-    let userId = req.params.userId;
-    let userIndex = -1
-
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].id == userId) {
-            userIndex = i;
-            break;
-        }
-        if (userIndex === -1) {
-            req.status(204).send("user not found");
-
-        } else {
-            users.splice(userIndex, 1);
-            res.send('user is deleted')
-        }
-
-    }
-
-
-})
-
-app.delete("/users", (req, res) => {  // delete all user
-
-    users = [];
-
-    res.send('all users delete')
-})
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-app.get('/profile', (req, res) => {
-    res.send('this is profile.')
-})
+});
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+    console.log(`example app listening on port ${port}`)
+});
