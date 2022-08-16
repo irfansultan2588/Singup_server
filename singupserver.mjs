@@ -10,7 +10,7 @@ const port = process.env.port || 3000;
 
 let userBase = [];
 
-app.post("/Singup", (req, res) => {
+app.post("/singup", (req, res) => {
 
     let body = req.body;
 
