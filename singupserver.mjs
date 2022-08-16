@@ -31,7 +31,7 @@ app.post("/singup", (req, res) => {
 
     let isFound = false;
 
-    for (let i = 0; i == userBase.length; i++) {
+    for (let i = 0; i < userBase.length; i++) {
 
         if (userBase[i].email === body.email.toLowerCase()) {
             isFound = true;
@@ -60,7 +60,7 @@ app.post("/singup", (req, res) => {
 app.post("/login", (req, res) => {
     let body = req.body;
 
-    if (!body.fistName || !body.lastName || !body.email || !body.password) {
+    if (!body.email || !body.password) {
 
         res.status(400).send(`required fields missing, request example:
           {
@@ -78,10 +78,8 @@ app.post("/login", (req, res) => {
 
     for (let i = 0; i < userBase.length; i++) {
         if (userBase[i].email === body.email) {
-
+            isFound = true;
             if (userBase[i].password === body.password) {
-
-                isFound = true;
 
                 res.status(200).send({
                     firstName: userBase[i].firstName,
