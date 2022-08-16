@@ -209,7 +209,6 @@ app.post("/login", (req, res) => {
                     lastName: userBase[i].lastName,
                     email: userBase[i].email,
                     message: "login successful",
-                    token: "some unique token"
                 })
                 return;
 
