@@ -38,7 +38,7 @@ app.post("/singup", (req, res) => {
     }
 
     userBase.push(newUser);
-    res.status(201).send("user is created");
+    res.status(201).send({ Message: "user is created" });
 });
 
 app.post("/login", (req, res) => {
