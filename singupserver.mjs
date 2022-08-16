@@ -29,11 +29,27 @@ app.post("/singup", (req, res) => {
         return;
     }
 
+    let isFound = false;
+
+    for (let i = 0; i == userBase.length; i++) {
+
+        if (userBase[i].email === body.email.toLowerCase()) {
+            isFound = true;
+            break;
+        }
+    }
+
+    if (isFound) {
+        res.status(400).send({
+            Message: `email ${body.email} already exist.`
+        });
+    }
+
     let newUser = {
         userId: nanoid(),
         firstName: body.firstName,
         lastName: body.lastName,
-        email: body.email,
+        email: body.email.toLowerCase(),
         password: body.password
     }
 
