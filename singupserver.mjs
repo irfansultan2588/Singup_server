@@ -2,14 +2,11 @@ import express from "express"
 import cors from "cors"
 import { nanoid } from 'nanoid'
 
-
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-
 const port = process.env.PORT || 3000;
-
 
 let userBase = [];
 
@@ -111,11 +108,6 @@ app.post("/login", (req, res) => {
         return;
     }
 })
-
-
-
-
-
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
