@@ -57,7 +57,9 @@ app.post("/signup", (req, res) => {
 
     userBase.push(newUser);
 
-    res.status(201).send({ message: "user is created" });
+    console.log(userBase, "userBase")
+
+    res.status(200).send({ message: "user is created" });
 });
 
 app.post("/login", (req, res) => {
