@@ -41,7 +41,7 @@ app.post("/signup", (req, res) => {
     }
     if (isFound) {
         res.status(400).send({
-            message: `email ${body.email} already exist.`
+            message: `Email ${body.email} already exist.`
         });
         return;
     }
@@ -89,14 +89,14 @@ app.post("/login", (req, res) => {
                     firstName: userBase[i].firstName,
                     lastName: userBase[i].lastName,
                     email: userBase[i].email,
-                    message: "login successful",
+                    message: "Login Successful",
                 })
                 return;
 
             } else { // password incorrect
 
                 res.status(401).send({
-                    message: "incorrect password"
+                    message: "Incorrect Password"
                 })
                 return;
             }
@@ -105,7 +105,7 @@ app.post("/login", (req, res) => {
 
     if (!isFound) {
         res.status(404).send({
-            message: "user not found"
+            message: "User Not Found"
         })
         return;
     }
